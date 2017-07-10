@@ -1,5 +1,4 @@
 # Dumps the model contents of a Glove text file into an easily accessible JSON file
-
 import json, sys
 
 def load_glove(path):
