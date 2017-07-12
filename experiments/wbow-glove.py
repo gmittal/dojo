@@ -2,6 +2,7 @@
 
 # Quora Duplicate Question Evaluation Task
 # Weighted Bag of Words Model with Glove-based Word Vector Representations to Generate Sentence Embeddings
+# 38.05% accuracy
 
 import numpy as np
 import spacy, pandas, tqdm, sys, json
