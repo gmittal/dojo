@@ -14,7 +14,9 @@ VOCAB = []
 train_data = pandas.DataFrame()
 
 def one_hot(n):
-    return np.eye(len(VOCAB))[n]
+    v = np.zeros(len(VOCAB))
+    v[n] = 1
+    return v
 
 def build_vocab(text):
     global VOCAB
