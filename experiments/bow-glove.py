@@ -45,7 +45,7 @@ def sent_vec(sent, weighted=True):
     vec = np.zeros(300)
     for word in doc:
         try:
-            weight = word_weight(word.text) if weighted == True else weight = 1
+            weight = word_weight(word.text) if weighted == True else 1
             vec += weight * np.asarray(glove[word.text.lower()])
         except KeyError:
             total_tokens -= 1
