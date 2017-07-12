@@ -2,7 +2,7 @@
 
 # Quora Duplicate Question Evaluation Task
 # Weighted Bag of Words Model with Glove-based Word Vector Representations to Generate Sentence Embeddings
-# 38.05% accuracy
+# 38.05% accuracy (weighted)
 
 import numpy as np
 import spacy, pandas, tqdm, sys, json
@@ -39,13 +39,14 @@ def word_weight(word, a=1.0):
     except KeyError:
         return 1
 
-def sent_vec(sent):
+def sent_vec(sent, weighted=True):
     doc = nlp(unicode(sent))
     total_tokens = len(doc)
     vec = np.zeros(300)
     for word in doc:
         try:
-            vec += word_weight(word.text) * np.asarray(glove[word.text.lower()])
+            weight = word_weight(word.text) if weighted == True else weight = 1
+            vec += weight * np.asarray(glove[word.text.lower()])
         except KeyError:
             total_tokens -= 1
     return vec / total_tokens
@@ -56,13 +57,13 @@ def cos_sim(u, v):
 def is_ascii(s):
     return all(ord(c) < 128 for c in s)
 
-def evaluate():
+def evaluate(weighted=True):
     correct = 0.0
     total = 0.0
     for i in tqdm.tqdm(range(len(train_data['question1'][:1500]))):
         if is_ascii(train_data['question1'][i]) and is_ascii(train_data['question1'][i]):
             total += 1.0
-            prediction = round(cos_sim(sent_vec(train_data['question1'][i]), sent_vec(train_data['question2'][i])))
+            prediction = round(cos_sim(sent_vec(train_data['question1'][i], weighted), sent_vec(train_data['question2'][i], weighted)))
             if prediction == train_data['is_duplicate'][i]: correct += 1.0
         else:
             continue
@@ -86,7 +87,7 @@ def init():
         with open('data/weights.json', 'w') as outfile:
                 json.dump(word_probs, outfile)
 
-    print "Accuracy: " + str(evaluate())
+    print "Accuracy: " + str(evaluate(weighted=False))
 
 
 if __name__ == "__main__":
