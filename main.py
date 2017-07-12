@@ -5,19 +5,20 @@
 # Written by Gautam Mittal
 # July 8, 2017
 
+from collections import Counter
 import numpy as np
 import tensorflow as tf
-import spacy, json, sys, pandas, tqdm
+import json, pandas, tqdm
+from util import contractions
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
-nlp = spacy.load('en')
 glove = {}
 word_probs = {}
 direction = []
 
 def load_glove_vecs(path='glove/glove.840B.300d.json'):
     return json.loads(open(path).read())
+
+def words(text): return re.findall(r'\w+', text.lower())
 
 def pca(mat, n):
     mat = mat - np.mean(mat, axis=0)
@@ -31,8 +32,7 @@ def get_word_probs(sent_list):
     VOCAB = {}
     for i in tqdm.tqdm(range(len(sent_list))):
         sentence = sent_list[i]
-        doc = nlp(unicode(sentence))
-        for words in doc:
+        for word in words(sentence):
             total += 1.0
             try:
                 VOCAB[words.text.lower()] += 1.0
@@ -85,4 +85,5 @@ def init():
 
 
 if __name__ == "__main__":
-    init()
+    print contractions.expand("don't you tell me what I'll do and shouldn't don't do")
+    # init()
