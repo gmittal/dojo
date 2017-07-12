@@ -49,11 +49,10 @@ def word_weight(word, a=1.0):
 
 def sent_vec(sent):
     doc = nlp(unicode(sent))
-    vec = np.zeros(300)
-    for word in doc: vec += word_weight(word.text) * np.asarray(glove[word.text.lower()])
-    return vec / len(doc)
+    vec = [word_weight(word.text) * np.asarray(glove[word.text.lower()]) for word in doc]
+    return np.mean(vec, axis=0)
 
-def feature_vec(sent, fpc):
+def feature_vec(sent):
     vec = sent_vec(sent)
     return vec - direction * direction.T * vec
 
