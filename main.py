@@ -62,7 +62,7 @@ def vec_sim(u, v):
 
 def init():
     global glove, word_probs, direction
-    
+
     print "Loading Training Data..."
     train_data = pandas.read_csv('data/train.csv')
     questions = list(train_data['question1'].values) + list(train_data['question2'].values)
@@ -83,7 +83,7 @@ def init():
         np.column_stack((train_sent_matrix, np.asarray(sent_vec(questions[i]))))
 
     print train_sent_matrix.shape
-    
+
 
 if __name__ == "__main__":
     init()
