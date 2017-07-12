@@ -12,7 +12,7 @@ nlp = spacy.load('en')
 
 glove = {}
 word_probs = {}
-direction = []
+train_data = pandas.DataFrame()
 
 def load_glove_vecs(path='glove/glove.840B.300d.json'):
     return json.loads(open(path).read())
@@ -40,9 +40,14 @@ def word_weight(word, a=1.0):
 
 def sent_vec(sent):
     doc = nlp(unicode(sent))
+    total_tokens = len(doc)
     vec = np.zeros(300)
-    for word in doc: vec += word_weight(word.text) * np.asarray(glove[word.text.lower()])
-    return vec / len(doc)
+    for word in doc:
+        try:
+            vec += word_weight(word.text) * np.asarray(glove[word.text.lower()])
+        except KeyError:
+            total_tokens -= 1
+    return vec / total_tokens
 
 def cos_sim(u, v):
     return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
@@ -63,7 +68,7 @@ def evaluate():
     return correct / total
 
 def init():
-    global glove, word_probs
+    global glove, word_probs, train_data
 
     print "Loading Training Data..."
     train_data = pandas.read_csv('data/train.csv')
