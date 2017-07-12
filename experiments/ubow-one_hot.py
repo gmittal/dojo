@@ -2,6 +2,7 @@
 
 # Quora Duplicate Question Evaluation Task
 # Unweighted Bag of Words Model using One-Hot Word Vector Space Representations
+# 65.2% accuracy on 1000 training examples from Quora dataset
 
 import numpy as np
 import spacy, pandas, tqdm, sys
@@ -38,7 +39,7 @@ def evaluate():
         prediction = round(cos_sim(doc_vec(train_data['question1'][i]), doc_vec(train_data['question2'][i])))
         if prediction == train_data['is_duplicate'][i]: correct += 1.0
 
-    return correct / len(train_data['question1'])
+    return correct / len(train_data['question1'][:1000])
 
 def main():
     global train_data
