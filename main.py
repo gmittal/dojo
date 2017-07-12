@@ -9,7 +9,6 @@ from collections import Counter
 import numpy as np
 import tensorflow as tf
 import json, pandas, tqdm
-from util import contractions
 
 glove = {}
 word_probs = {}
@@ -18,8 +17,6 @@ direction = []
 def load_glove_vecs(path='glove/glove.840B.300d.json'):
     return json.loads(open(path).read())
 
-def words(text): return re.findall(r'\w+', text.lower())
-
 def pca(mat, n):
     mat = mat - np.mean(mat, axis=0)
     [u,s,v] = np.linalg.svd(mat)
@@ -27,19 +24,9 @@ def pca(mat, n):
     v = v[:,:n]
     return np.dot(mat, v)
 
-def get_word_probs(sent_list):
-    total = 0.0
-    VOCAB = {}
-    for i in tqdm.tqdm(range(len(sent_list))):
-        sentence = sent_list[i]
-        for word in words(sentence):
-            total += 1.0
-            try:
-                VOCAB[words.text.lower()] += 1.0
-            except KeyError:
-                VOCAB[words.text.lower()] = 1.0
-    for k in VOCAB: VOCAB[k] /= total
-    return VOCAB
+def P(word):
+    "Probability of `word`."
+    return WORDS[word] / N
 
 def word_weight(word, a=1.0):
     try:
@@ -85,5 +72,4 @@ def init():
 
 
 if __name__ == "__main__":
-    print contractions.expand("don't you tell me what I'll do and shouldn't don't do")
-    # init()
+    init()
