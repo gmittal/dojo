@@ -4,7 +4,7 @@
 # Weighted Bag of Words Model with Glove-based Word Vector Representations to Generate Sentence Embeddings
 
 import numpy as np
-import spacy, pandas, tqdm, sys
+import spacy, pandas, tqdm, sys, json
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
