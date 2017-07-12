@@ -34,7 +34,7 @@ def cos_sim(u, v):
 
 def evaluate():
     correct = 0.0
-    for i in tqdm.tqdm(range(len(train_data['question1']))):
+    for i in tqdm.tqdm(range(len(train_data['question1'][:1000]))):
         prediction = round(cos_sim(doc_vec(train_data['question1'][i]), doc_vec(train_data['question2'][i])))
         if prediction == train_data['is_duplicate'][i]: correct += 1.0
 
