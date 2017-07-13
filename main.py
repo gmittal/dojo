@@ -8,31 +8,36 @@
 from collections import Counter
 import numpy as np
 import tensorflow as tf
-import json, pandas, tqdm
+import json, pandas, tqdm, re
+import preprocess
 
 glove = {}
-word_probs = {}
 direction = []
+WORDS = {}
 
 def load_glove_vecs(path='glove/glove.840B.300d.json'):
     return json.loads(open(path).read())
 
-def pca(mat, n):
+# Principal Component Analysis
+def pca(mat, n=1):
     mat = mat - np.mean(mat, axis=0)
     [u,s,v] = np.linalg.svd(mat)
     v = v.transpose()
     v = v[:,:n]
     return np.dot(mat, v)
 
+# Simple tokenizer
+def words(text): return re.findall(r'\w+', text.lower())
+
+# Probability of words
 def P(word):
-    "Probability of `word`."
-    return WORDS[word] / N
+    return WORDS[word] / sum(WORDS.values())
 
 def word_weight(word, a=1.0):
     try:
-        return a / (a + word_probs[word.lower()])
+        return a / (a + P(word.lower()))
     except KeyError:
-        return 1
+        return 1 / (sum(WORDS.values()) + 1)
 
 def sent_vec(sent):
     doc = nlp(unicode(sent))
@@ -47,28 +52,37 @@ def vec_sim(u, v):
     return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
 
 def init():
-    global glove, word_probs, direction
+    global glove, WORDS, direction
 
-    print "Loading Training Data..."
+    print "Loading Training & Testing Data..."
+    # Load the CSV files
     train_data = pandas.read_csv('data/train.csv')
-    questions = list(train_data['question1'].values) + list(train_data['question2'].values)
+    test_data = pandas.read_csv('data/test.csv')
+    train_data = train_data.fillna('empty')
+    test_data = test_data.fillna('empty')
+
+    # Just get the questions
+    questions = list(train_data['question1'].values) + list(train_data['question2'].values) + list(test_data['question1'].values) + list(test_data['question2'].values)
+
+    # Clean everything
+    questions = map(preprocess.fix, questions)
 
     print "Loading Glove Vectors..."
     glove = load_glove_vecs()
 
     print "Loading word weights..."
     try:
-        word_probs = json.loads(open('data/weights.json').read())
+        WORDS = json.loads(open('data/weights.json').read())
     except IOError:
-        word_probs = get_word_probs(map(lambda x: unicode(x), questions))
+        WORDS = Counter(words(' '.join(questions)))
         with open('data/weights.json', 'w') as outfile:
-                json.dump(word_probs, outfile)
+                json.dump(WORDS, outfile)
 
-    train_sent_matrix = np.asarray(sent_vec(questions[0]))
+    train_sent_matrix = np.asarray([sent_vec(questions[0])])
     for i in tqdm.tqdm(range(1, len(questions))):
-        np.column_stack((train_sent_matrix, np.asarray(sent_vec(questions[i]))))
+        np.concatenate((train_sent_matrix, np.asarray(sent_vec(questions[i]))))
 
-    print train_sent_matrix.shape
+    print train_sent_matrix.transpose().shape
 
 
 if __name__ == "__main__":
