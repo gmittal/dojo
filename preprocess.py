@@ -8,5 +8,5 @@ def words(text): return re.findall(r'\w+', text.lower())
 
 def fix(text):
     expanded = contractions.expand(text)
-    tokens = map(lambda word: spelling.correct(word), words(expanded))
+    tokens = [spelling.correct(word) for word in words(expanded)]
     return ' '.join(tokens)

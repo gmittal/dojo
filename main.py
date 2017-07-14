@@ -62,10 +62,10 @@ def init():
     test_data = test_data.fillna('empty')
 
     # Just get the questions
-    questions = list(train_data['question1'].values) + list(train_data['question2'].values) + list(test_data['question1'].values) + list(test_data['question2'].values)
+    questions = train_data['question1'].values) + train_data['question2'].values + test_data['question1'].values + test_data['question2'].values
 
     # Clean everything
-    questions = map(preprocess.fix, questions)
+    questions = [preprocess.fix(question) for question in questions]
 
     print "Loading Glove Vectors..."
     glove = load_glove_vecs()
