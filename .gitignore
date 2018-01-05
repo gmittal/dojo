@@ -2,3 +2,4 @@ glove/*
 data/*
 venv
 *.pyc
+save/*.npy

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Quora Duplicate Question Evaluation Task
+# Duplicate Question Evaluation Task
 # Unweighted Bag of Words Model using One-Hot Word Vector Space Representations
-# 65.2% accuracy on 1000 training examples from Quora dataset
+# 65.6% accuracy on 1000 training examples from Quora dataset
 
 import numpy as np
 import spacy, pandas, tqdm, sys
@@ -35,17 +35,17 @@ def cos_sim(u, v):
 
 def evaluate():
     correct = 0.0
-    for i in tqdm.tqdm(range(len(train_data['question1'][:1000]))):
+    for i in tqdm.tqdm(range(len(train_data['question1'][:1500]))):
         prediction = round(cos_sim(doc_vec(train_data['question1'][i]), doc_vec(train_data['question2'][i])))
         if prediction == train_data['is_duplicate'][i]: correct += 1.0
 
-    return correct / len(train_data['question1'][:1000])
+    return correct / len(train_data['question1'][:1500])
 
 def main():
     global train_data
 
     print "Loading Question Data..."
-    train_data = pandas.read_csv('data/train.csv')
+    train_data = pandas.read_csv('../data/train.csv')
     questions = map(lambda x: str(x), list(train_data['question1'].values) + list(train_data['question2'].values))
 
     print "Building vocabulary..."

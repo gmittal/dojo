@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Quora Duplicate Question Evaluation Task
-# Weighted Bag of Words Model with Glove-based Word Vector Representations to Generate Sentence Embeddings
+# Duplicate Question Evaluation Task
+# Unweighted Bag of Words Model with Glove-based Word Vector Representations to Generate Sentence Embeddings
 # 38.05% accuracy (both unweighted and weighted)
 
 import numpy as np
