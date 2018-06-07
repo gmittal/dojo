@@ -1,5 +1,7 @@
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.keras import Sequential
+from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten
 
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir="logs/")
 
@@ -19,23 +21,23 @@ test_images /= 255
 train_labels = tf.keras.utils.to_categorical(train_labels, 10)
 test_labels = tf.keras.utils.to_categorical(test_labels, 10)
 
-model = tf.keras.Sequential()
-model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
+model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
                  activation='relu',
                  input_shape=(28, 28, 1)))
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-model.add(tf.keras.layers.Dropout(0.2))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+model.add(Dropout(0.2))
 
-model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
-model.add(tf.keras.layers.Dropout(0.2))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.2))
 
-model.add(tf.keras.layers.Conv2D(128, (3, 3), activation='relu'))
-model.add(tf.keras.layers.Dropout(0.2))
+model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(Dropout(0.2))
 
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(128, activation='relu'))
-model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dense(10, activation=tf.nn.softmax))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 model.fit(train_images, train_labels, epochs=10, batch_size=256, callbacks=[tensorboard])
