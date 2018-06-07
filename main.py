@@ -47,7 +47,7 @@ model.add(Dense(10, activation=tf.nn.softmax))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Train the huge model
-model.fit(train_images, train_label, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
+model.fit(train_images, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
 
 # Predict some image classes
 results = model.predict(test_images)
