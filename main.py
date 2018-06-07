@@ -6,8 +6,6 @@ from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout,
 
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir="logs/")
 
-VALIDATION_SPLIT = 0.2
-
 # Load the training data
 train = pd.read_csv('data/train.csv')
 train_labels = train['label'].values
@@ -17,10 +15,6 @@ train_images = train_images.reshape(42000, 28, 28, 1)
 train_images = train_images.astype(np.float32)
 train_images /= 255
 train_labels = tf.keras.utils.to_categorical(train_labels, 10)
-
-split = int(42000*(1-VALIDATION_SPLIT))
-train_set, val_set = train_images[:split,:], train_images[split:,:]
-train_labelset, val_labelset = train_labels[:split,:], train_labels[split:,:]
 
 # Load the test data
 test = pd.read_csv('data/test.csv')
@@ -53,7 +47,7 @@ model.add(Dense(10, activation=tf.nn.softmax))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Train the huge model
-model.fit(train_set, train_labelset, validation_data=(val_set, val_labelset), epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
+model.fit(train_images, train_label, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
 
 # Predict some image classes
 results = model.predict(test_images)
