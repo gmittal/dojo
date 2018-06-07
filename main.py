@@ -7,31 +7,41 @@ from tensorflow.python.keras.callbacks import TensorBoard
 
 tensorboard = TensorBoard(log_dir="logs/")
 
+TRAIN_SPLIT = 0.7
+np.random.seed(0)
+
 data = pd.read_csv('data/train.csv')
 labels = data['Survived']
 data['Dependents'] = data['Parch'] + data['SibSp']
 features = data.drop(columns=['Name', 'Cabin', 'Age', 'Ticket', 'Embarked', 'PassengerId', 'Survived', 'Parch', 'SibSp'])
 
+# Data normalization
+features['Sex'] = list(map(lambda x: 1 if x == 'female' else 0, features['Sex'])) # Sex should be mapped to binary value
 
-# model = Sequential()
-# model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
-#                  activation='relu',
-#                  input_shape=(28, 28, 1)))
-# model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-# model.add(tf.keras.layers.Dropout(0.2))
-#
-# model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-# model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
-# model.add(tf.keras.layers.Dropout(0.2))
-#
-# model.add(tf.keras.layers.Conv2D(128, (3, 3), activation='relu'))
-# model.add(tf.keras.layers.Dropout(0.2))
-#
-# model.add(tf.keras.layers.Flatten())
-# model.add(tf.keras.layers.Dense(128, activation='relu'))
-# model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
-# model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-#
-# model.fit(train_images, train_labels, epochs=10, batch_size=256, callbacks=[tensorboard])
+mean = features.mean(axis=0)
+features -= mean
+std = features.std(axis=0)
+features /= std
+
+# Prepare training and validation splits
+msk = np.random.rand(len(features)) < TRAIN_SPLIT
+
+# Training data
+train_data = features[msk].values
+train_labels = labels[msk].values
+
+# Validation data
+val_data = features[~msk].values
+val_labels = labels[~msk].values
+
+print(train_data)
+print(train_labels)
+
+model = Sequential()
+model.add(Dense(128, input_shape=(4,), activation='sigmoid'))
+model.add(Dense(1, activation=tf.nn.softmax))
+model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+model.fit(train_data, train_labels, validation_data=(val_data, val_labels), epochs=10, batch_size=256, callbacks=[tensorboard])
 # loss, accuracy = model.evaluate(test_images, test_labels)
 # print(accuracy)
