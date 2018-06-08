@@ -6,7 +6,11 @@ grpcio==1.12.1
 html5lib==0.9999999
 Markdown==2.6.11
 numpy==1.14.3
+pandas==0.23.0
 protobuf==3.5.2.post1
+python-dateutil==2.7.3
+pytz==2018.4
+scipy==1.1.0
 six==1.11.0
 tensorboard==1.8.0
 tensorflow==1.8.0
