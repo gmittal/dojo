@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNormalization
+from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir="logs/")
 
@@ -22,6 +23,23 @@ test_images = test.values
 test_images = test_images.reshape(28000, 28, 28, 1)
 test_images = test_images.astype(np.float32)
 test_images /= 255
+
+# Data augmentation
+generator = ImageDataGenerator(
+    featurewise_center=False,
+    samplewise_center=False,
+    featurewise_std_normalization=False,
+    samplewise_std_normalization=False,
+    zca_whitening=False,
+    rotation_range=10,
+    zoom_range=0.1,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
+    horizontal_flip=False,
+    vertical_flip=False
+)
+
+generator.fit(train_images)
 
 # Build a huge model
 model = Sequential()
@@ -44,10 +62,11 @@ model.add(Dense(512, activation='relu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.2))
 model.add(Dense(10, activation=tf.nn.softmax))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
 # Train the huge model
-model.fit(train_images, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
+# model.fit(train_images, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
+model.fit_generator(generator.flow(train_images, train_labels, batch_size=256), epochs=10, callbacks=[tensorboard])
 
 # Predict some image classes
 results = model.predict(test_images)
