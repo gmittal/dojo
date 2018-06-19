@@ -1,6 +1,8 @@
 .DS_Store
 data/
 logs/
+.floydexpt
+.floydignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
