@@ -23,7 +23,7 @@ generator = ImageDataGenerator(
     featurewise_std_normalization=False,
     samplewise_std_normalization=False,
     zca_whitening=False,
-    rotation_range=10,
+    rotation_range=15,
     zoom_range=0.1,
     width_shift_range=0.1,
     height_shift_range=0.1,
@@ -45,20 +45,28 @@ model.add(Dropout(0.2))
 
 model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(BatchNormalization(axis=-1))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(BatchNormalization(axis=-1))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.3))
+
+model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(BatchNormalization(axis=-1))
 model.add(Conv2D(128, (3, 3), activation='relu'))
 model.add(BatchNormalization(axis=-1))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.4))
 
 model.add(Flatten())
-model.add(Dense(512, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.2))
 model.add(Dense(10, activation=tf.nn.softmax))
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
-# Train the huge model
+# Train the model
 # model.fit(train_data, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
-model.fit_generator(generator.flow(train_data, train_labels, batch_size=64), epochs=20, callbacks=[tensorboard])
+model.fit_generator(generator.flow(train_data, train_labels, batch_size=64), epochs=125, callbacks=[tensorboard])
 
 # # Predict some image classes
 # results = model.predict(test_data)
