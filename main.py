@@ -4,7 +4,6 @@ import tensorflow as tf
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten, BatchNormalization
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
-import pickle
 
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir="logs/")
 
@@ -58,7 +57,7 @@ model.add(Dense(10, activation=tf.nn.softmax))
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
 # Train the huge model
-# model.fit(train_images, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
+# model.fit(train_data, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
 model.fit_generator(generator.flow(train_data, train_labels, batch_size=64), epochs=20, callbacks=[tensorboard])
 
 # # Predict some image classes
