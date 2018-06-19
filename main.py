@@ -38,23 +38,22 @@ model = Sequential()
 model.add(Conv2D(32, kernel_size=(3, 3), strides=(1, 1),
                  activation='relu',
                  input_shape=(32, 32, 3)))
-model.add(BatchNormalization(axis=-1))
+model.add(BatchNormalization())
 model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.2))
 
 model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(BatchNormalization(axis=-1))
+model.add(BatchNormalization())
 model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(BatchNormalization(axis=-1))
+model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.3))
 
 model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(BatchNormalization(axis=-1))
+model.add(BatchNormalization())
 model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(BatchNormalization(axis=-1))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(BatchNormalization())
 model.add(Dropout(0.4))
 
 model.add(Flatten())
@@ -67,10 +66,7 @@ model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['ac
 # Train the model
 # model.fit(train_data, train_labels, validation_split=0.2, epochs=10, shuffle=True, batch_size=256, callbacks=[tensorboard])
 model.fit_generator(generator.flow(train_data, train_labels, batch_size=64), epochs=125, callbacks=[tensorboard])
+model.save_weights('save/model.h5')
 
-# # Predict some image classes
-# results = model.predict(test_data)
-# results = np.argmax(results, axis=1)
-# results = pd.Series(results,name="Label")
-# prediction = pd.concat([pd.Series(range(1, 28001), name = "ImageId"),results], axis=1)
-# prediction.to_csv("submission.csv", index=False)
+loss, accuracy = model.evaluate(test_data, test_labels)
+print(accuracy)
