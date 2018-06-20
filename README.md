@@ -1,4 +1,4 @@
-# digit-recognizer
+# Digit Recognizer
 Kaggle's ["Digit Recognizer"](https://www.kaggle.com/c/digit-recognizer). Testing out some neural network architectures on a global leaderboard.
 
 ### Competition Description
