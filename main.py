@@ -26,7 +26,7 @@ test = pad_sequences(test_tokens, maxlen=200)
 
 model = Sequential()
 model.add(Embedding(20000, 128, input_length=200))
-model.add(LSTM(60, return_sequences=True))
+model.add(Bidirectional(LSTM(60, return_sequences=True)))
 model.add(GlobalMaxPool1D())
 model.add(Dropout(0.1))
 model.add(Dense(50, activation='relu'))
