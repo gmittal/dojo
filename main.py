@@ -7,7 +7,6 @@ from keras.layers import Dense, Input, LSTM, Embedding, Dropout, Embedding
 from keras.layers import Bidirectional, GlobalMaxPool1D
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from keras.callbacks import TensorBoard
 
 train_data = pd.read_csv('data/train.csv')
 test_data = pd.read_csv('data/test.csv')
