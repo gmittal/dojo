@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
-from keras.datasets import imdb
 from keras.models import Sequential
-from keras.layers import Dense
 from keras.layers import Dense, Input, LSTM, Embedding, Dropout, Embedding
 from keras.layers import Bidirectional, GlobalMaxPool1D
 from keras.preprocessing.text import Tokenizer
