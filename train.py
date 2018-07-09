@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import keras
 from keras.models import Sequential
 from keras.layers import Dense, Input, LSTM, Embedding, Dropout, Embedding
 from keras.layers import Bidirectional, GlobalMaxPool1D, Conv1D
@@ -38,5 +39,6 @@ model.add(Dense(50, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(6, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+keras.utils.plot_model(model, to_file='save/model.png') # Save a graphical representation of the model
 
 model.fit(train, y, batch_size=32, epochs=20, validation_split=0.1, callbacks=[checkpoint, early_stopping, tensorboard])

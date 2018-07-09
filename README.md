@@ -25,14 +25,14 @@ To generate a ```submission.csv``` prediction file based on the [Kaggle](https:/
 python evaluate.py
 ```
 
-<!-- ### Model
+### Model
 Below is the network architecture used for classification. It was trained on [data from Google](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data) available on Kaggle.
 
-**Achieves approximately 99% test accuracy** on both validation data and the [public Kaggle leaderboard](save/leaderboard.png) test data.
+<!-- **Achieves approximately 99% test accuracy** on both validation data and the [public Kaggle leaderboard](save/leaderboard.png) test data. -->
 
 <p align="center">
 <img width="300" src="save/model.png"/>
-</p> -->
+</p>
 
 
 ### License
