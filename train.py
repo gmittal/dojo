@@ -26,10 +26,10 @@ tokenizer.fit_on_texts(list(train_sent))
 train_tokens = tokenizer.texts_to_sequences(train_sent)
 save_tokenizer('save/tokenizer.pickle', tokenizer)
 
-train = pad_sequences(train_tokens, maxlen=400)
+train = pad_sequences(train_tokens, maxlen=300)
 
 model = Sequential()
-model.add(Embedding(20000, 256, input_length=400))
+model.add(Embedding(20000, 256, input_length=300))
 model.add(Bidirectional(LSTM(128, return_sequences=True)))
 model.add(Conv1D(64, kernel_size=3, padding="valid", kernel_initializer="glorot_uniform"))
 model.add(GlobalMaxPool1D())

@@ -13,7 +13,7 @@ tokenizer = load_tokenizer('save/tokenizer.pickle')
 test_data = pd.read_csv('data/test.csv')
 test_sent = test_data['comment_text']
 test_tokens = tokenizer.texts_to_sequences(test_sent)
-test = pad_sequences(test_tokens, maxlen=400)
+test = pad_sequences(test_tokens, maxlen=300)
 
 model = load_model('save/model.h5')
 
