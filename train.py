@@ -6,6 +6,7 @@ from keras.layers import Bidirectional, GlobalMaxPool1D, Conv1D
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+from util.tokenizer_helpers import *
 
 # Set up callbacks
 tensorboard = TensorBoard(log_dir='./logs')
@@ -17,19 +18,15 @@ checkpoint = ModelCheckpoint('save/model.h5',
                                 mode='max')
 
 train_data = pd.read_csv('data/train.csv')
-test_data = pd.read_csv('data/test.csv')
 y = train_data[['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']].values
-
 train_sent = train_data['comment_text']
-test_sent = test_data['comment_text']
 
 tokenizer = Tokenizer(num_words=20000, lower=True)
 tokenizer.fit_on_texts(list(train_sent))
 train_tokens = tokenizer.texts_to_sequences(train_sent)
-test_tokens = tokenizer.texts_to_sequences(test_sent)
+save_tokenizer('save/tokenizer.pickle', tokenizer)
 
 train = pad_sequences(train_tokens, maxlen=400)
-test = pad_sequences(test_tokens, maxlen=400)
 
 model = Sequential()
 model.add(Embedding(20000, 256, input_length=400))
