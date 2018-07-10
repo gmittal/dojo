@@ -17,10 +17,7 @@ test = pad_sequences(test_tokens, maxlen=300)
 
 model = load_model('save/model.h5')
 
-results = model.predict(test)
-results = np.round(results)
-results = results.reshape(results.shape[0])
-results = pd.Series(results,name="label")
-prediction = pd.concat([pd.Series(range(20800, 26000), name='id'),results], axis=1)
-prediction['label'] = prediction['label'].map(int)
-prediction.to_csv("submission.csv", index=False)
+submission = pd.read_csv('data/sample_submission.csv')
+y_pred = model.predict(test, batch_size=1024)
+submission[["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]] = y_pred
+submission.to_csv('submission.csv', index=False)
