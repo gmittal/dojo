@@ -26,5 +26,5 @@ toolz==0.8.2
 torch==0.1.12.post2
 torchvision==0.1.8
 tqdm==4.15.0
-Werkzeug==0.12.2
+Werkzeug==0.15.3
 wrapt==1.10.10
