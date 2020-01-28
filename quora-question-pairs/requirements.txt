@@ -20,7 +20,7 @@ python-dateutil==2.6.1
 pytz==2017.2
 PyYAML==4.2b1
 six==1.10.0
-tensorflow==1.12.1
+tensorflow==1.15.2
 termcolor==1.1.0
 toolz==0.8.2
 torch==0.1.12.post2
