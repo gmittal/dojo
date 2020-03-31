@@ -1,5 +1,5 @@
 backports.weakref==1.0rc1
-bleach==1.5.0
+bleach==3.1.4
 cymem==1.31.2
 dill==0.2.7.1
 funcsigs==1.0.2
