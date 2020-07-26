@@ -149,7 +149,7 @@ def main(argv):
   del argv
 
   model = ConvVAE(28, 5)
-  
+
   report_model(ConvVAE(10, 5))
 
 
