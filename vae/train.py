@@ -7,9 +7,8 @@ import torch.nn as nn
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('data', './articles.json', 'JSON file path.')
-flags.DEFINE_integer('n_sim', 100, 'Number of embeddings to visualize.')
-flags.DEFINE_integer('k', 10, 'Number of nearest neighbors.')
+flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate.')
+flags.DEFINE_integer('batch_size', 512, 'Batch size.')
 
 
 class VAE(nn.Module):
