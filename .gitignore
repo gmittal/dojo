@@ -4,3 +4,5 @@ venv
 data/*
 !data/README.md
 logs
+__pycache__
+utils/__pycache__
